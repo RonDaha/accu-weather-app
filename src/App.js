@@ -1,25 +1,55 @@
-import logo from './logo.svg';
-import './App.css';
+import { useContext, useState } from 'react'
+import { Context } from './store'
+import { SearchBar } from './components/SearchBar'
+import { Loader } from './components/Loader'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export const App = () => {
+
+    const [globalState, dispatch] = useContext(Context)
+    const [celTemp, setCelTemp] = useState(false)
+
+    let cards = null
+
+    if (globalState.forecastsData && globalState.forecastsData.DailyForecasts) {
+        cards = globalState.forecastsData.DailyForecasts.map((daily, i) => {
+            return (
+                <div key={i} className="card">
+                    <div className="day-part">
+                        <div className="head">Day</div>
+                        <div className="temp">{daily.Day.IconPhrase} - {celTemp ? daily.tempC.max : daily.tempF.max}</div>
+                    </div>
+                    <div className="day-part">
+                        <div className="head">Night</div>
+                        <div className="temp">{daily.Night.IconPhrase} - {celTemp ? daily.tempC.min : daily.tempF.min}</div>
+                    </div>
+                </div>
+            )
+        })
+    }
+
+    return (
+        <div className="App">
+            {globalState.isLoading ? <Loader /> : null }
+            <div className="title">
+                Choose Your Location
+            </div>
+            <SearchBar/>
+
+            <div className="sub-title">
+                {globalState.location ? `${globalState.location.LocalizedName}, ${globalState.location.Country.LocalizedName}` : null}
+                {globalState.error ? globalState.error : null}
+            </div>
+
+            <div className="cards-container">
+                {cards}
+            </div>
+
+            {cards ? <div className="temp-switch">
+                    <span onClick={() => setCelTemp(false)} className={`${celTemp ? '' : 'active'}`}>F</span>
+                    <span onClick={() => setCelTemp(true)} className={`${celTemp ? 'active' : ''}`}>C</span>
+                </div> : null}
+
+        </div>
+      )
 }
 
-export default App;

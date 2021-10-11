@@ -1,0 +1,45 @@
+.search-bar {
+  width: 80%;
+  position: relative;
+  max-width: 500px;
+  input {
+    box-shadow: $mainBoxShadow;
+    border: 1px solid transparent;
+    border-radius: 25px;
+    padding: 15px;
+    width: 100%;
+    z-index: 2;
+    position: relative;
+  }
+  .search-options-container {
+    padding-top: 20px;
+    box-shadow: $mainBoxShadow;
+    position: absolute;
+    top: 28px;
+    z-index: 1;
+    width: 100%;
+    border-bottom-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    background-color: $white;
+    max-height: 0;
+    overflow: hidden;
+    transition: .3s;
+    &.display {
+      max-height: 400px;
+      overflow: scroll;
+    }
+    .search-option {
+      padding: 20px;
+      transition: .2s;
+      cursor: pointer;
+      &:hover {
+        color: $white;
+        background-color: #ccc;
+      }
+      &:last-of-type {
+        border-bottom-right-radius: 25px;
+        border-bottom-left-radius: 25px;
+      }
+    }
+  }
+}
